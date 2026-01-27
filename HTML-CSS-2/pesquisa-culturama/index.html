@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <title>Pesquisa Culturama</title>
 </head>
 <body>
@@ -18,7 +19,7 @@
                 <input type="text" name="userName" required>
                 <br>
                 <label for="userAge">Idade: </label>
-                <input type="number" name="age" id="age" min="12" max="100" required>
+                <input type="number" name="userAge" id="userAge" min="12" max="100" required>
                 <br>
                 <label for="userBithDate">Data de nascimento: </label>
                 <input type="date" name="bithDate" id="bithDate">
@@ -34,6 +35,19 @@
                 <br>
             </fieldset>
 
+            <fieldset>
+                <legend>Perfil</legend>
+
+                <p>Gênero: </p>
+                <input type="radio" name="userGender" id="userGenderF" value="Feminino">
+                <label for="userGenderF">Feminino</label>
+
+                <input type="radio" name="userGender" id="userGenderM" value="Masculino">
+                <label for="userGenderM">Masculino</label>
+
+                <input type="radio" name="userGender" id="userGenderN" value="notInformed">
+                <label for="userGenderN">Prefiro não informar</label>
+            </fieldset>
             <button type="submit">Enviar</button>
         </form>
     </section>
