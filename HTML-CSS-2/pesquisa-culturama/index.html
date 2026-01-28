@@ -95,7 +95,7 @@
                 <input type="text" name="userCity" id="userCity">
             </fieldset>
             <!-- Hábitos -->
-             <fieldset>
+            <fieldset>
                 <legend>Hábitos</legend>
                 <p>Redes sociais: </p>
                 <input type="checkbox" name="social" id="instagram" value="instagram">
@@ -121,7 +121,28 @@
                 <br>
                 <label for="favoriteColor">Cor favorita: </label>
                 <input type="color" name="userFavoriteColor" id="favoriteColor">
-             </fieldset>
+            </fieldset>
+            <!-- Opnião -->
+            <fieldset>
+                <legend>Opnião</legend>
+
+                <input type="radio" name="userOpnion" id="opnionOtima" value="otima">
+                <label for="opnionOtima">Ótima</label>
+
+                <input type="radio" name="userOpnion" id="opnionBoa" value="boa">
+                <label for="opnionBoa">Boa</label>
+
+                <input type="radio" name="userOpnion" id="opnionRegular" value="regular">
+                <label for="opnionRegular">Regular</label>
+
+                <input type="radio" name="userOpnion" id="opnionRuim" value="ruim">
+                <label for="opnionRuim">Ruim</label>
+                <br>
+
+                <label for="textOpnion">Escreva a sua opnião: </label><br>
+                <textarea name="userOpnionText" id="textOpnion"></textarea>
+
+            </fieldset>
             <button type="submit">Enviar</button>
         </form>
     </section>
