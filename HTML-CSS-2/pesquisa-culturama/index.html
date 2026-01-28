@@ -143,7 +143,19 @@
                 <label for="textOpnion">Escreva a sua opnião: </label><br>
                 <textarea name="userOpnionText" id="textOpnion" placeholder="Digite aqui..."></textarea>
             </fieldset>
+            <!-- Confirmações -->
+            <fieldset>
+                <legend>Confirmações</legend>
+
+                <input type="checkbox" name="userLgpd" id="UserLgpdTerm" value="accepted" required>
+                <label for="UserLgpdTerm">Eu aceito participar da pesquisa</label>
+                <br>
+                <input type="checkbox" name="userGetResult" id="getResult" value="accepted">
+                <label for="getResult">Desejo receber o resultado por email</label>
+            </fieldset>
+
             <button type="submit">Enviar</button>
+            <button type="reset">Limpar</button>
         </form>
     </section>
 </body>
