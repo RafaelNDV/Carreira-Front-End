@@ -16,6 +16,14 @@ header {
   height: 64px;
 }
 
+.logo-mobile{
+    display: block;
+}
+
+.logo-desktop{
+    display: none;
+}
+
 .navegation-menu {
   margin-top: 24px;
 }
@@ -69,4 +77,13 @@ nav {
   .navegation-menu nav {
     display: block;
   }
+}
+
+@media screen and (min-width: 1024px) {
+    .logo-desktop{
+        display: block;
+    }
+    .logo-mobile{
+        display: none;
+    }
 }
