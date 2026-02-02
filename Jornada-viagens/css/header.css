@@ -16,12 +16,12 @@ header {
   height: 64px;
 }
 
-.logo-mobile{
-    display: block;
+.img-mobile {
+  display: block;
 }
 
-.logo-desktop{
-    display: none;
+.img-desktop {
+  display: none;
 }
 
 .navegation-menu {
@@ -77,13 +77,33 @@ nav {
   .navegation-menu nav {
     display: block;
   }
+
+  .img-desktop {
+    display: none;
+  }
 }
 
 @media screen and (min-width: 1024px) {
-    .logo-desktop{
-        display: block;
-    }
-    .logo-mobile{
-        display: none;
-    }
+  header {
+    padding: 38px 120px;
+  }
+  .logo {
+    width: 260px;
+    height: 64px;
+  }
+  .img-desktop {
+    display: block;
+  }
+  .img-mobile {
+    display: none;
+  }
+  .navegation-menu a:hover {
+    color: var(--primary-color);
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  header {
+    padding: 38px 160px;
+  }
 }
