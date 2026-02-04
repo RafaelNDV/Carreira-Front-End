@@ -1,0 +1,66 @@
+.payments {
+  margin-bottom: 88px;
+}
+
+.payments h2 {
+  width: 320px;
+  margin: auto;
+}
+
+.payments h3 {
+  margin-bottom: 24px;
+}
+.image-content {
+  display: grid;
+  height: 460px;
+  margin-top: 24px;
+  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 254px 182px;
+}
+.image-content .bag {
+  background: url(../img/bag-mobile.png) no-repeat;
+  background-size: cover;
+}
+.image-content .passport {
+  background: url(../img/passport-mobile.png) no-repeat;
+  background-size: cover;
+}
+.image-content .peaple {
+  background: url(../img/peaple-mobile.png) no-repeat;
+  background-size: cover;
+  grid-column: span 2;
+}
+
+@media screen and (min-width: 768px) {
+  .payments h2 {
+    width: 100%;
+    margin: auto;
+  }
+
+  .image-content .bag {
+    background: url(../img/bag-tablet-desktop.png) no-repeat;
+    background-size: cover;
+  }
+  .image-content .passport {
+    background: url(../img/passport-tablet-desktop.png) no-repeat;
+    background-size: cover;
+  }
+  .image-content .peaple {
+    background: url(../img/peaple-tablet-desktop.png) no-repeat;
+    background-size: cover;
+    grid-column: span 2;
+  }
+}
+
+@media screen and (min-width: 1440px){
+     .payments .content{
+        display: grid;
+        grid-template-columns: 384px 790px;
+        gap: 24px;
+    }
+
+    .image-content{
+        margin: 0;
+    }
+}

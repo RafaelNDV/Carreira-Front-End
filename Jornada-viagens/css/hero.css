@@ -6,6 +6,10 @@
   background-position: center bottom;
 }
 
+.hero{
+  width: auto;
+}
+
 .hero h2 {
     text-align: center;
     padding: 88px 24px;

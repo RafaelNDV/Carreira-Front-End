@@ -3,6 +3,10 @@
   margin: auto;
 }
 
+.destinations{
+  margin-bottom: 64px;
+}
+
 .destinations .item header {
   display: block;
   position: static;
