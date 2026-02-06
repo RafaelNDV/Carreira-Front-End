@@ -38,11 +38,12 @@ section {
   width: 320px;
   margin: auto;
 }
-
+ 
 .section-title h2 {
   font-size: 28px;
   font-weight: var(--title-weight);
-  margin: 0;
+  width: 290px;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -81,6 +82,7 @@ section {
 @media screen and (min-width: 768px) {
   .section-title h2 {
     font-size: 32px;
+    width: auto;
   }
   section {
     width: 648px;
@@ -94,7 +96,7 @@ section {
   }
 }
 
-@media screen and (min-width: 1440px) {
+@media screen and (min-width: 1440px) { 
   section {
     width: 1200px;
     margin: auto;
