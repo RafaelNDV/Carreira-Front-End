@@ -1,0 +1,106 @@
+/* styles.css */
+:root{
+  --bg: #0b1220;
+  --card: rgba(255,255,255,0.08);
+  --card-border: rgba(255,255,255,0.14);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.72);
+  --accent: #7c5cff;
+  --accent-2: #22c55e;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(124,92,255,0.25), transparent 60%),
+              radial-gradient(900px 500px at 80% 10%, rgba(34,197,94,0.18), transparent 55%),
+              var(--bg);
+  color: var(--text);
+}
+
+h1{
+  width: min(900px, 92vw);
+  margin: 48px auto 12px;
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: -0.02em;
+}
+
+p{
+  width: min(900px, 92vw);
+  margin: 0 auto 28px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Lista em grid */
+#lista-pets{
+  width: min(900px, 92vw);
+  margin: 0 auto 56px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+/* Card do pet */
+.li-pet{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  backdrop-filter: blur(8px);
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.li-pet:hover{
+  transform: translateY(-2px);
+  border-color: rgba(124,92,255,0.45);
+  background: rgba(255,255,255,0.10);
+}
+
+.pet-especie,
+.pet-nome,
+.pet-raca{
+  display: flex;
+  gap: 6px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Destaques */
+.pet-nome{
+  color: var(--text);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Um “badge” simples pra espécie */
+.pet-especie{
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.pet-especie::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 56px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+/* Mobile ajustes */
+@media (max-width: 520px){
+  h1{ margin-top: 36px; }
+  #lista-pets{ gap: 12px; }
+  .li-pet{ border-radius: 12px; }
+}

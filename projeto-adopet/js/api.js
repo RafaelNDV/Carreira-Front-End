@@ -1,0 +1,13 @@
+const api = {
+    async buscarInformacoesPets(){
+        try{
+            const resposta = await fetch('http://localhost:3000/pets')
+            return await resposta.json()
+        }catch(error){
+            alert('Erro ao buscar dados')
+            throw error
+        }
+    }
+}
+
+export default api
