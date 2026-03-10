@@ -65,6 +65,18 @@
       "nome": "brigão",
       "especie": "gato",
       "raca": "feio"
+    },
+    {
+      "id": "f048",
+      "nome": "amigo",
+      "especie": "triste",
+      "raca": "moral"
+    },
+    {
+      "id": "2ca7",
+      "nome": "",
+      "especie": "",
+      "raca": ""
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
