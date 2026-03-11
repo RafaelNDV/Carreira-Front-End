@@ -1,6 +1,15 @@
 import api from "./api.js"
 
 const ui = {
+
+  async preencherFormulario(petId){
+    const pet =  await api.buscarPetPorId(petId)
+    document.getElementById("pet-id").value = pet.id;
+    document.getElementById("pet-nome").value = pet.nome;
+    document.getElementById("pet-especie").value = pet.especie;
+    document.getElementById("pet-raca").value = pet.raca;
+  },
+
   async renderizarPets() {
     const listaPets = document.getElementById("lista-pets");
     listaPets.innerHTML = "";
@@ -32,9 +41,15 @@ const ui = {
     racaPet.textContent = `Raça: ${pet.raca}`;
     racaPet.classList.add("pet-raca");
 
+    const botaoEditar = document.createElement('button')
+    botaoEditar.classList.add('botao-editar')
+    botaoEditar.textContent = 'Editar'
+    botaoEditar.onclick = () => ui.preencherFormulario(pet.id)
+
     li.appendChild(nomePet);
     li.appendChild(especiePet);
     li.appendChild(racaPet);
+    li.appendChild(botaoEditar)
     listaPets.appendChild(li);
   },
 };
