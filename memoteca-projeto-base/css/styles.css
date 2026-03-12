@@ -282,3 +282,15 @@ span {
   background: #041832;
   margin: 96px 0 48px 0;
 }
+
+.sem-pensamentos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+  gap: 30px;
+}
+
+.hidden{
+  display: none;
+}
