@@ -7,21 +7,9 @@
       "raca": "Siamês"
     },
     {
-      "id": "2b3c",
-      "especie": "canina",
-      "nome": "Rex",
-      "raca": "Labrador"
-    },
-    {
-      "id": "3c4d",
-      "especie": "felina",
-      "nome": "Luna",
-      "raca": "Persa"
-    },
-    {
       "id": "4d5e",
+      "nome": "Maxine",
       "especie": "canina",
-      "nome": "Max",
       "raca": "Beagle"
     },
     {
@@ -71,12 +59,6 @@
       "nome": "amigo",
       "especie": "triste",
       "raca": "moral"
-    },
-    {
-      "id": "2ca7",
-      "nome": "",
-      "especie": "",
-      "raca": ""
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

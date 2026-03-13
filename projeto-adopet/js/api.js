@@ -1,7 +1,9 @@
+const BASE_URL = `http://localhost:3000/pets`
+
 const api = {
     async buscarInformacoesPets(){
         try{
-            const resposta = await fetch('http://localhost:3000/pets')
+            const resposta = await fetch(BASE_URL)
             return await resposta.json()
         }catch(error){
             alert('Erro ao buscar dados')
@@ -11,7 +13,7 @@ const api = {
 
     async salvarPet(pet) {
         try {
-            const response = await fetch('http://localhost:3000/pets', {
+            const response = await fetch(BASE_URL , {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -27,7 +29,7 @@ const api = {
 
     async buscarPetPorId(id){
         try{
-            const resposta = await fetch(`http://localhost:3000/pets/${id}`)
+            const resposta = await fetch(`${BASE_URL}/${id}`)
             return await resposta.json()
         }catch(error){
             console.log(error)
@@ -39,7 +41,7 @@ const api = {
 
     async editarPet(pet){
         try{
-            const reposta = await fetch(`http://localhost:3000/pets/${pet.id}`, {
+            const reposta = await fetch(`${BASE_URL}/${pet.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,6 +49,17 @@ const api = {
                 body: JSON.stringify(pet)
             })
             return await reposta.json()
+        }catch(error){
+            alert(`Erro: ${error.message}`)
+            throw error
+        }
+    },
+
+    async deletarPet(id){
+        try{
+            const respose = fetch(`${BASE_URL}/${id}`, {
+                method: 'DELETE',
+            })
         }catch(error){
             alert(`Erro: ${error.message}`)
             throw error
