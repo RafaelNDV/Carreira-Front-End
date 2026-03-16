@@ -1,0 +1,11 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "directory": "./vid_flow",
+      "changeProcessCWD": true
+    }
+  ],
+  "eslint.validate": [
+    "javascript"
+  ]
+}
