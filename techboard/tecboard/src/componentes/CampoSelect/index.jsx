@@ -1,10 +1,12 @@
 import './campo-select-estilos.css'
 
-export function Selected(props){
+export function Selected({ itens, ...rest }){
     return(
-        <select className='campo-select' {...props}>
-            <option value="vermelhor">Vermelho</option>
-            <option value="azul">Azul</option>
+        <select {...rest} className='campo-select' defaultValue="">
+            <option value="" disabled>Selecione uma opção</option>
+            {itens.map(function (item) {
+                return <option key={item.id} value={item.id}>{item.nome}</option>
+            })}
         </select>
     )
 }
