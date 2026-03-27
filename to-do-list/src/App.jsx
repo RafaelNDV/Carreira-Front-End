@@ -84,7 +84,9 @@ const toggleDialog = () => {
             })}
           </ToDoList>
           <Footer>
-            <Dialog isOpen={showDialog} onClose={toggleDialog}/>
+            <Dialog isOpen={showDialog} onClose={toggleDialog}>
+              <p>This modal dialog has a groovy backdrop!</p>
+            </Dialog>
             <FabButton onClick={toggleDialog}>
               <IconPlus />
             </FabButton>

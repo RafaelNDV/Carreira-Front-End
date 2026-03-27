@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react'
+import { IconPlus } from '../icons/index'
 import './dialog.style.css'
 
-export function Dialog({ isOpen, onClose }){
+export function Dialog({ isOpen, onClose, children }){
     // Não deveriamos fazer buscas no DOM desse jeito!
     // const dialog = document.querySelector('dialog')
 
@@ -26,9 +27,13 @@ export function Dialog({ isOpen, onClose }){
 
     return (
         <>
-            <dialog ref={dialogRef}>
-                <button autoFocus onClick={onClose}>Close</button>
-                <p>This modal dialog has a groovy backdrop!</p>
+            <dialog ref={dialogRef} className='dialog'>
+                <div className='btn-close-wrapper'>
+                    <button autoFocus onClick={onClose} className='btn-close'>
+                        <IconPlus/>
+                    </button>
+                </div>
+                {children}
             </dialog>
         </>
     )
