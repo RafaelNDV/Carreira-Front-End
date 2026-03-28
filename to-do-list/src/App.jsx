@@ -10,6 +10,7 @@ import { SubHeading } from "./components/SubHeading"
 import { ToDoItem } from "./components/ToDoItem"
 import { ToDoList } from "./components/ToDoList"
 import { Dialog } from "./components/Dialog"
+import { TodoForm } from "./components/TodoForm"
 
 const todos = [
   {
@@ -58,7 +59,11 @@ const [showDialog, setShowDialog] = useState(false)
 
 const toggleDialog = () => {
   setShowDialog(!showDialog)
-  console.log('alternar modal')
+}
+
+const addTodo = () => {
+  console.log('Precisamos add um novo todo')
+  toggleDialog()
 }
 
   return (
@@ -85,7 +90,7 @@ const toggleDialog = () => {
           </ToDoList>
           <Footer>
             <Dialog isOpen={showDialog} onClose={toggleDialog}>
-              <p>This modal dialog has a groovy backdrop!</p>
+              <TodoForm onSubmit={addTodo}/>
             </Dialog>
             <FabButton onClick={toggleDialog}>
               <IconPlus />
