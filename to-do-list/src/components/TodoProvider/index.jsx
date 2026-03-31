@@ -1,13 +1,28 @@
 import TodoContext from "./TodoContext";
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-const TODOS = 'todos'
+const TODOS = "todos";
 
 export function TodoProvider({ children }) {
+  const savedTodos = localStorage.getItem(TODOS);
 
-const savedTodos = localStorage.getItem(TODOS)
+  const [todos, setTodos] = useState(savedTodos ? JSON.parse(savedTodos) : []);
 
-const [todos, setTodos] = useState(savedTodos ? JSON.parse(savedTodos) : [])
+  const [showDialog, setShowDialog] = useState(false);
+
+  const [selectedTodo, setSelectedTodo] = useState();
+
+  const openFormTodoDialog = (todo) => {
+    if (todo) {
+      setSelectedTodo(todo);
+    }
+    setShowDialog(true);
+  };
+
+  const closeFormTodoDialog = () => {
+    setShowDialog(false);
+    setSelectedTodo(null);
+  };
 
   const addTodo = (formData) => {
     const description = formData.get("description");
@@ -23,8 +38,8 @@ const [todos, setTodos] = useState(savedTodos ? JSON.parse(savedTodos) : [])
   };
 
   useEffect(() => {
-    localStorage.setItem(TODOS, JSON.stringify(todos))
-  }, [todos])
+    localStorage.setItem(TODOS, JSON.stringify(todos));
+  }, [todos]);
 
   const toggleTodoCompleted = (todo) => {
     setTodos((prevState) => {
@@ -40,6 +55,20 @@ const [todos, setTodos] = useState(savedTodos ? JSON.parse(savedTodos) : [])
     });
   };
 
+  const editTodo= (formData) => {
+    setTodos((prevState) => {
+      return prevState.map((t) => {
+        if (t.id == selectedTodo.id) {
+          return {
+            ...t,
+            description: formData.get('description'),
+          };
+        }
+        return t;
+      });
+    });
+  };
+
   const deleteTodo = (todo) => {
     setTodos((prevState) => {
       return prevState.filter((t) => t.id != todo.id);
@@ -48,9 +77,19 @@ const [todos, setTodos] = useState(savedTodos ? JSON.parse(savedTodos) : [])
 
   return (
     <TodoContext
-    value={{todos, addTodo, toggleTodoCompleted, deleteTodo}}
+      value={{
+        todos,
+        addTodo,
+        toggleTodoCompleted,
+        deleteTodo,
+        showDialog,
+        openFormTodoDialog,
+        closeFormTodoDialog,
+        selectedTodo,
+        editTodo
+      }}
     >
-        {children}
+      {children}
     </TodoContext>
-  )
+  );
 }
