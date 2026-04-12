@@ -16,6 +16,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/auth'>
           <Route path='register' element={<Register/>}/>
           <Route path='login' element={<Login/>}/>
+          <Route path='logout' element={<Logout/>}/>
         </Route>
 
         <Route path='/'>
