@@ -8,10 +8,24 @@ import { Author } from "../../components/Author"
 import Typography from "../../components/Typography"
 import { CommentList } from "../../components/CommentList"
 import ReactMarkdown from 'react-markdown'
+import { useParams } from "react-router"
 
 export const BlogPost = () => {
 
-    const post = posts[0]
+    const { slug } = useParams()
+
+    const post = posts.find(p => p.slug === slug)
+
+    if (!post) {
+        return (
+            <AppLayout>
+                <main className={styles.main}>
+                    <p>Post não encontrado.</p>
+                </main>
+            </AppLayout>
+        )
+    }
+    
     return (
         <AppLayout>
             <main className={styles.main}>
