@@ -5,18 +5,20 @@ import { Logout } from "../pages/Logout";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import { Feed } from "../pages/Feed";
 import { BlogPost } from "../pages/BlogPost";
+import { AuthLayout } from "../layouts/Auth";
+import { AppLayout } from "../layouts/App";
 
 export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/auth">
+        <Route path="/auth" element={<AuthLayout/>}>
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
         </Route>
 
-        <Route path="/">
+        <Route path="/" element={<AppLayout/>}>
           <Route
             path=""
             element={
@@ -33,6 +35,7 @@ export const AppRouter = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
