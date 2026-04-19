@@ -1,38 +1,15 @@
+import { Link } from "react-router";
 import { Author } from "../Author";
-import styles from "./cardpost.module.css";
-import { Link, useActionData } from "react-router";
 import { ModalComment } from "../ModalComment";
-import { useState } from "react";
-import { http } from "../../api";
 import { useAuth } from "../../hooks/useAuth";
-
+import { usePostInteractions } from "../../hooks/usePostInteractions";
 import { ThumbsUpButton } from "./ThumbsUpButton";
+import styles from "./cardpost.module.css";
 
 export const CardPost = ({ post }) => {
-
-  const [likes, setLikes] = useState(post.likes);
-  const [comments, setComments] = useState(post.comments);
-
-  const handleNewComment = (comment) => {
-    setComments([comment, ...comments])
-  }
-
-  const handleLikeButton = () => {
-
-    const token = localStorage.getItem('access_token')
-
-    http.post(`blog-posts/${post.id}/like`, {}, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(() => {
-        setLikes((oldState) => oldState + 1);
-        console.log("Incrementar like");
-    });
-  }
-
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuth();
+  const { likes, comments, handleNewComment, handleLikeButton } =
+    usePostInteractions(post);
 
   return (
     <article className={styles.card}>
@@ -49,11 +26,15 @@ export const CardPost = ({ post }) => {
       <footer className={styles.footer}>
         <div className={styles.actions}>
           <div className={styles.action}>
-            <ThumbsUpButton loading={false} onClick={handleLikeButton} disabled={!isAuthenticated}/>
+            <ThumbsUpButton
+              loading={false}
+              onClick={() => handleLikeButton(post.id)}
+              disabled={!isAuthenticated}
+            />
             <p>{likes}</p>
           </div>
           <div className={styles.action}>
-            <ModalComment onSuccess={handleNewComment} postId={post.id}/>
+            <ModalComment onSuccess={handleNewComment} postId={post.id} />
             <p>{comments.length}</p>
           </div>
         </div>

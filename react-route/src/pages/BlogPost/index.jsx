@@ -1,46 +1,48 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import ReactMarkdown from "react-markdown";
 import styles from "./blogpost.module.css";
 import { ThumbsUpButton } from "../../components/CardPost/ThumbsUpButton";
 import { Author } from "../../components/Author";
 import Typography from "../../components/Typography";
 import { CommentList } from "../../components/CommentList";
-import ReactMarkdown from "react-markdown";
-import { useNavigate, useParams } from "react-router";
-import { use, useEffect } from "react";
 import { ModalComment } from "../../components/ModalComment";
-import { useState } from "react";
-import { AppLayout } from "../../layouts/App" 
+import { AppLayout } from "../../layouts/App";
 import { http } from "../../api";
+import { usePostInteractions } from "../../hooks/usePostInteractions";
+import { useAuth } from "../../hooks/useAuth";
 
 export const BlogPost = () => {
   const { slug } = useParams();
-  const [post, setPost] = useState(null)
+  const navigate = useNavigate();
+  const [post, setPost] = useState(null);
+  const { isAuthenticated } = useAuth();
+  const {
+    likes,
+    comments,
+    handleNewComment,
+    handleLikeButton,
+    handleDeleteComment,
+  } = usePostInteractions(post);
 
-  const navigate = useNavigate()
-
-  const [comments, setComments] = useState([])
-
-  const handleNewComment = (comment) => {
-    setComments([comment, ...comments])
-  }
-
-  useEffect (() => {
-    http.get(`blog-posts/slug/${slug}`)
-      .then(response => {
-        setPost(response.data)
-        setComments(response.data.comments)
+  useEffect(() => {
+    http
+      .get(`blog-posts/slug/${slug}`)
+      .then((response) => {
+        setPost(response.data);
       })
-      .catch(error => {
-        if(error.status == 404){
-          navigate('not-found')
+      .catch((error) => {
+        if (error.status == 404) {
+          navigate("not-found");
         }
-      })
-  }, [slug, navigate])
+      });
+  }, [slug, navigate]);
 
   if (!post) {
     return (
       <AppLayout>
         <main className={styles.main}>
-          <p>Post não encontrado.</p>
+          <p>Post nÃ£o encontrado.</p>
         </main>
       </AppLayout>
     );
@@ -64,22 +66,26 @@ export const BlogPost = () => {
         <footer className={styles.footer}>
           <div className={styles.actions}>
             <div className={styles.action}>
-              <ThumbsUpButton loading={false} />
-              <p>{post.likes}</p>
+              <ThumbsUpButton
+                loading={false}
+                onClick={() => handleLikeButton(post.id)}
+                disabled={!isAuthenticated}
+              />
+              <p>{likes}</p>
             </div>
             <div className={styles.action}>
-              <ModalComment onSuccess={handleNewComment} postId={post?.id}/> 
+              <ModalComment onSuccess={handleNewComment} postId={post.id} />
               <p>{comments.length}</p>
             </div>
           </div>
           <Author author={post.author} />
         </footer>
       </article>
-      <Typography variant="h3">Código:</Typography>
+      <Typography variant="h3">CÃ³digo:</Typography>
       <div className={styles.code}>
         <ReactMarkdown>{post.markdown}</ReactMarkdown>
       </div>
-      <CommentList comments={comments} />
+      <CommentList comments={comments} onDelete={handleDeleteComment} />
     </main>
   );
 };
