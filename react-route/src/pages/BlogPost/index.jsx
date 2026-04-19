@@ -9,6 +9,7 @@ import { use, useEffect } from "react";
 import { ModalComment } from "../../components/ModalComment";
 import { useState } from "react";
 import { AppLayout } from "../../layouts/App" 
+import { http } from "../../api";
 
 export const BlogPost = () => {
   const { slug } = useParams();
@@ -16,15 +17,23 @@ export const BlogPost = () => {
 
   const navigate = useNavigate()
 
+  const [comments, setComments] = useState([])
+
+  const handleNewComment = (comment) => {
+    setComments([comment, ...comments])
+  }
+
   useEffect (() => {
-    fetch(`http://localhost:3000/blog-posts/slug/${slug}`)
+    http.get(`blog-posts/slug/${slug}`)
       .then(response => {
-        if (response.status == 404) {
+        setPost(response.data)
+        setComments(response.data.comments)
+      })
+      .catch(error => {
+        if(error.status == 404){
           navigate('not-found')
         }
-        return response.json()
       })
-    .then(data => setPost(data))
   }, [slug, navigate])
 
   if (!post) {
@@ -59,8 +68,8 @@ export const BlogPost = () => {
               <p>{post.likes}</p>
             </div>
             <div className={styles.action}>
-              <ModalComment /> 
-              <p>{post.comments.length}</p>
+              <ModalComment onSuccess={handleNewComment} postId={post?.id}/> 
+              <p>{comments.length}</p>
             </div>
           </div>
           <Author author={post.author} />
@@ -70,7 +79,7 @@ export const BlogPost = () => {
       <div className={styles.code}>
         <ReactMarkdown>{post.markdown}</ReactMarkdown>
       </div>
-      <CommentList comments={post.comments} />
+      <CommentList comments={comments} />
     </main>
   );
 };

@@ -1,15 +1,15 @@
 import { CardPost } from "../../components/CardPost";
 import { useEffect, useState } from "react";
 import styles from "./feed.module.css";
+import { http } from "../../api";
 
 export const Feed = () => {
 
   const [posts, setPosts] = useState([])
 
   useEffect(() => {
-    fetch('http://localhost:3000/blog-posts')
-    .then(response => response.json())
-    .then(data => setPosts(data))
+    http.get('blog-posts')
+    .then(response => setPosts(response.data))
   }, [])
 
   return (

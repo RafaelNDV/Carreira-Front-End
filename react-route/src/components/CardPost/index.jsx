@@ -1,31 +1,38 @@
 import { Author } from "../Author";
 import styles from "./cardpost.module.css";
-import { Link } from "react-router";
+import { Link, useActionData } from "react-router";
 import { ModalComment } from "../ModalComment";
 import { useState } from "react";
+import { http } from "../../api";
+import { useAuth } from "../../hooks/useAuth";
 
 import { ThumbsUpButton } from "./ThumbsUpButton";
 
 export const CardPost = ({ post }) => {
+
   const [likes, setLikes] = useState(post.likes);
+  const [comments, setComments] = useState(post.comments);
+
+  const handleNewComment = (comment) => {
+    setComments([comment, ...comments])
+  }
 
   const handleLikeButton = () => {
 
     const token = localStorage.getItem('access_token')
 
-    fetch(`http://localhost:3000/blog-posts/${post.id}/like`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+    http.post(`blog-posts/${post.id}/like`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
-    .then((response) => {
-        if(response.ok){
-            setLikes((oldState) => oldState + 1);
-            console.log("Incrementar like");
-        }
+    .then(() => {
+        setLikes((oldState) => oldState + 1);
+        console.log("Incrementar like");
     });
-  };
+  }
+
+  const { isAuthenticated } = useAuth()
 
   return (
     <article className={styles.card}>
@@ -42,12 +49,12 @@ export const CardPost = ({ post }) => {
       <footer className={styles.footer}>
         <div className={styles.actions}>
           <div className={styles.action}>
-            <ThumbsUpButton loading={false} onClick={handleLikeButton} />
+            <ThumbsUpButton loading={false} onClick={handleLikeButton} disabled={!isAuthenticated}/>
             <p>{likes}</p>
           </div>
           <div className={styles.action}>
-            <ModalComment />
-            <p>{post.comments.length}</p>
+            <ModalComment onSuccess={handleNewComment} postId={post.id}/>
+            <p>{comments.length}</p>
           </div>
         </div>
         <Author author={post.author} />
