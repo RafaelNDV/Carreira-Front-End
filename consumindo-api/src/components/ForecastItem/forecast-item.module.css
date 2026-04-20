@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: lightskyblue;
+    height: 100%;
+    width: 33%;
+    border: 1px solid white;
+    border-radius: 20px;
+    gap: 0px;
+}
