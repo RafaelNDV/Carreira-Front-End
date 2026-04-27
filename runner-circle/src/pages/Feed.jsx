@@ -1,57 +1,73 @@
-import { useState, useEffect } from 'react'
-import Header from '../components/layout/Header'
-import Sidebar from '../components/layout/Sidebar'
-import BottomNavigation from '../components/layout/BottomNavigation'
-import WorkoutCard from '../components/ui/WorkoutCard'
-import FloatingActionButton from '../components/ui/FloatingActionButton'
-import { GET_FEED } from '../../database/graphql/query/feed'
-import { useQuery } from '@apollo/client/react'
-import { ErrorMessage } from '../components/ui/ErrorMessage'
-import { Dropdown } from '../components/ui/Dropdown'
+import { useState, useEffect } from "react";
+import Header from "../components/layout/Header";
+import Sidebar from "../components/layout/Sidebar";
+import BottomNavigation from "../components/layout/BottomNavigation";
+import WorkoutCard from "../components/ui/WorkoutCard";
+import FloatingActionButton from "../components/ui/FloatingActionButton";
+import {
+  GET_FEED,
+  GET_FEED_BY_CATEGORY,
+} from "../../database/graphql/query/feed";
+import { useQuery } from "@apollo/client/react";
+import { ErrorMessage } from "../components/ui/ErrorMessage";
+import { Dropdown } from "../components/ui/Dropdown";
+import { EquipamentosEmUso } from "../components/ui/EquipamentosEmUso";
 
 function Feed({ onNavigateToNewPost, onNavigateToProfile, onLogout }) {
-  const [activeItem, setActiveItem] = useState('feed')
-  const [workouts, setWorkouts] = useState([])
-  const { loading, error, data } = useQuery(GET_FEED)
+  const [activeItem, setActiveItem] = useState("feed");
+  const [workouts, setWorkouts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const { loading, error, data } = useQuery(
+    selectedCategory ? GET_FEED_BY_CATEGORY : GET_FEED,
+    {
+      variables: selectedCategory ? { category: selectedCategory } : {},
+    },
+  );
 
   useEffect(() => {
     const fetchWorkouts = async () => {
-        const normalizedWorkouts = data.allFeeds.map(item => {
-          if (item.workout) {
-            return {
-              id: item.id,
-              ...item.workout
-            }
-          }
-          return item
-        })
-        setWorkouts(normalizedWorkouts)
-    }
+      const normalizedWorkouts = data.allFeeds.map((item) => {
+        if (item.workout) {
+          return {
+            id: item.id,
+            ...item.workout,
+          };
+        }
+        return item;
+      });
+      setWorkouts(normalizedWorkouts);
+    };
 
-    if(data?.allFeeds){
-      fetchWorkouts()
+    if (data?.allFeeds) {
+      fetchWorkouts();
     }
-  }, [data])
+  }, [data]);
 
   const handleMenuClick = (itemId) => {
-    setActiveItem(itemId)
-    console.log('Menu clicked:', itemId)
-    
-    if (itemId === 'profile') {
-      onNavigateToProfile?.()
-    } else if (itemId === 'logout') {
-      onLogout?.()
+    setActiveItem(itemId);
+    console.log("Menu clicked:", itemId);
+
+    if (itemId === "profile") {
+      onNavigateToProfile?.();
+    } else if (itemId === "logout") {
+      onLogout?.();
     }
-  }
+  };
+
+  const categoryOptions = [
+    { value: "", label: "Todos" },
+    { value: "corrida", label: "Corrida" },
+    { value: "caminhada", label: "Caminhada" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <div className="md:flex">
         {/* Desktop Sidebar */}
         <Sidebar activeItem={activeItem} onItemClick={handleMenuClick} />
-        
+
         {/* Main Content */}
         <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6">
           <div className="max-w-7xl mx-auto">
@@ -59,14 +75,16 @@ function Feed({ onNavigateToNewPost, onNavigateToProfile, onLogout }) {
               Feed de Treinos
             </h1>
 
-            <Dropdown 
-            options={[]}
-            value={''}
-            onchange={() => {}}
-            placeholder='Todos'
-            className='mb-6'
+            <Dropdown
+              options={categoryOptions}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              placeholder="Selecione uma Categoria"
+              className="mb-6"
             />
-            
+
+            <EquipamentosEmUso/>
+
             {/* Loading State */}
             {loading && (
               <div className="flex justify-center items-center py-8">
@@ -76,7 +94,10 @@ function Feed({ onNavigateToNewPost, onNavigateToProfile, onLogout }) {
 
             {/* Error State */}
             {error && (
-              <ErrorMessage message={`Erro ao carregar treinos`} error={error.message}/>
+              <ErrorMessage
+                message={`Erro ao carregar treinos`}
+                error={error.message}
+              />
             )}
 
             {/* Workout Cards Grid */}
@@ -93,11 +114,11 @@ function Feed({ onNavigateToNewPost, onNavigateToProfile, onLogout }) {
 
       {/* Mobile Bottom Navigation */}
       <BottomNavigation activeItem={activeItem} onItemClick={handleMenuClick} />
-      
+
       {/* Floating Action Button */}
       <FloatingActionButton onClick={onNavigateToNewPost} />
     </div>
-  )
+  );
 }
 
-export default Feed
+export default Feed;

@@ -16,7 +16,7 @@ export const Dropdown = ({
 
   const selectedOption = options.find((option) => option.value === value);
   return (
-    <div className={`realtive ${className}`}>
+    <div className={`relative ${className}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
