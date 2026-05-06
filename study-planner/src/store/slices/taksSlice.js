@@ -24,7 +24,7 @@ const taskSlice = createSlice({
             const {taskId, updatedTask} = action.payload
             const taskIndex = state.tasks.findIndex(task => task.id === taskId)
             if(taskIndex !== -1){
-                state.tasks[tasksIndex] = {...state.task[taskIndex], ...updatedTask}
+                state.tasks[taskIndex] = {...state.tasks[taskIndex], ...updatedTask}
             }
         },
         deleteTask: (state, action) => {
@@ -36,7 +36,7 @@ const taskSlice = createSlice({
 export const { addTask, toggleTaskComplete, editTask, deleteTask} = taskSlice.actions
 
 export const selectTasks = (state) => state.tasks.tasks
-export const selectPedingTasks = (state) => state.tasks.tasks.filter((task) => !task.completed)
+export const selectPendingTasks = (state) => state.tasks.tasks.filter((task) => !task.completed)
 
 export const selectCompletedTasks = (state) => state.tasks.tasks.filter((task) => task.completed)
 
