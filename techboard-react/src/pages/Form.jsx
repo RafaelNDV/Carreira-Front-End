@@ -1,21 +1,32 @@
 import { Box } from "@mui/material";
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from "react-hook-form";
 
 export function Form() {
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch, control } = useForm();
 
-  const nameWatch = watch('name')
+  const { fields, append, remove } = useFieldArray({
+    name: "fruits",
+    control,
+  });
 
-  function handleOnSubmit(data){
-    console.log(data)
+  const nameWatch = watch("name");
+
+  function handleOnSubmit(data) {
+    console.log(data);
   }
 
   return (
     <Box sx={{ height: "100vh", backgroundColor: "#fff" }}>
       <form onSubmit={handleSubmit(handleOnSubmit)}>
-        <input {...register("name")} type="text" placeholder="Nome" />
-        <input {...register("lastName")} type="text" placeholder="Sobrenome" />
-        <input {...register("age")} type="text" placeholder="Idade" />
+        <button type="button" onClick={append}>Adicionar</button>
+        <ul>
+          {fields.map((item, index) => (
+            <li key={item.id}>
+              <input {...register(`fruits.${index}.item`)} type="text" placeholder="Fruta" />
+              <button type="button" onClick={() => remove(index)}>Remover</button>
+            </li>
+          ))}
+        </ul>
 
         <button type="submit">Submeter</button>
         <span>{nameWatch}</span>
