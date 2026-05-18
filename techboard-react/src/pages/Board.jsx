@@ -21,31 +21,59 @@ import Chip from "@mui/material/Chip";
 import tecboardLogo from "../assets/tecboard.svg";
 import bannerImage from "../assets/banner.png";
 import { eventSchema } from "../schema";
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from "@tanstack/react-query";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export function Board() {
-  const { handleSubmit, control, formState: {errors} } = useForm({
-    resolver: zodResolver(eventSchema)
+
+  const queryClient = useQueryClient()
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["getEvents"],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:3000/events");
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar eventos");
+      }
+
+      return response.json();
+    },
+  });
+
+  async function postEvents() {
+    const response = await fetch("http://localhost:3000/events",{
+      method: 'POST',
+      body: JSON.stringify(event)
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar eventos");
+    }
+
+    return response.json();
+  }
+
+  const postEventMutation = useMutation({
+    mutationKey: ['postEvents'],
+    mutationFn: postEvents,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({queryKey: ['getEvents']})
+    }
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(eventSchema),
   });
 
   function handleOnSubmit(data) {
+    postEventMutation.mutate(data)
     console.log(data);
   }
-
-  const {data, isLoading, isError} = useQuery({
-    queryKey: ['events'],
-    queryFn: async () => {
-      const response = await fetch('http://localhost:3000/events')
-
-      if (!response.ok) {
-        throw new Error('Erro ao buscar eventos')
-      }
-
-      return response.json()
-    },
-  })
 
   return (
     <Box sx={{ height: "100vh", backgroundColor: "#06151A" }}>
@@ -210,46 +238,36 @@ export function Board() {
             gap: "64px",
           }}
         >
-          {!isError && !isLoading && data.map((category) => (
-            <Box key={category.name}>
-              <Typography>{category.name}</Typography>
-
-              <Grid
-                container
-                spacing={3}
-                sx={{ maxWidth: "1200px", mx: "auto" }}
-              >
-                {category.events.map((event) => (
-                  <Grid item xs={12} sm={6} md={4} key={event.id}>
-                    <Card sx={{ width: "282px" }}>
-                      <CardMedia
-                        component="img"
-                        height="236px"
-                        image={event.image}
-                        alt={event.name}
-                      />
-                      <CardContent
-                        sx={{
-                          flexGrow: 1,
-                          py: 3,
-                          px: 2,
-                          backgroundColor: "#212121",
-                        }}
-                      >
-                        <Chip>
-                          <Typography variant="caption">
-                            {event.theme}
-                          </Typography>
-                        </Chip>
-                        <Typography>{event.date}</Typography>
-                        <Typography>{event.name}</Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          ))}
+          <Grid container spacing={3} sx={{ maxWidth: "1200px", mx: "auto" }}>
+            {!isError &&
+              !isLoading &&
+              data.map((event) => (
+                <Grid item xs={12} sm={6} md={4} key={event.id}>
+                  <Card sx={{ width: "282px" }}>
+                    <CardMedia
+                      component="img"
+                      height="236px"
+                      image={event.image}
+                      alt={event.name}
+                    />
+                    <CardContent
+                      sx={{
+                        flexGrow: 1,
+                        py: 3,
+                        px: 2,
+                        backgroundColor: "#212121",
+                      }}
+                    >
+                      <Chip>
+                        <Typography variant="caption">{event.theme}</Typography>
+                      </Chip>
+                      <Typography>{event.date}</Typography>
+                      <Typography>{event.name}</Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+          </Grid>
         </Box>
       </Box>
     </Box>
