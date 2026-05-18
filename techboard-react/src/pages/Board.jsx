@@ -22,29 +22,63 @@ import tecboardLogo from "../assets/tecboard.svg";
 import bannerImage from "../assets/banner.png";
 import { eventSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function Board() {
+  const queryClient = useQueryClient();
 
-  const queryClient = useQueryClient()
+  const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["getEvents"],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:3000/events");
+  async function getEvents(page = 1) {
+    const response = await fetch(
+      `http://localhost:3000/events?_page=${page}&_per_page=4`,
+    );
 
-      if (!response.ok) {
-        throw new Error("Erro ao buscar eventos");
-      }
+    if (!response.ok) {
+      throw new Error("Erro ao buscar eventos");
+    }
 
-      return response.json();
-    },
+    return response.json();
+  }
+
+  const {
+    data: eventsData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["getEvents", page],
+    queryFn: () => getEvents(page),
+  });
+
+  async function getInfiniteEvents({ pageParam }) {
+    const response = await fetch(
+      `http://localhost:3000/events?_page=${pageParam}&_per_page=4`,
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao buscar eventos");
+    }
+
+    return response.json();
+  }
+
+  const {
+    data: eventsInfiniteData,
+    isPending: isInfinitePending,
+    isError: isInfiniteError,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["getInfiniteQuery"],
+    queryFn: getInfiniteEvents,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.next,
   });
 
   async function postEvents() {
-    const response = await fetch("http://localhost:3000/events",{
-      method: 'POST',
-      body: JSON.stringify(event)
+    const response = await fetch("http://localhost:3000/events", {
+      method: "POST",
+      body: JSON.stringify(event),
     });
 
     if (!response.ok) {
@@ -55,11 +89,11 @@ export function Board() {
   }
 
   const postEventMutation = useMutation({
-    mutationKey: ['postEvents'],
+    mutationKey: ["postEvents"],
     mutationFn: postEvents,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({queryKey: ['getEvents']})
-    }
+      await queryClient.invalidateQueries({ queryKey: ["getEvents"] });
+    },
   });
 
   const {
@@ -71,7 +105,7 @@ export function Board() {
   });
 
   function handleOnSubmit(data) {
-    postEventMutation.mutate(data)
+    postEventMutation.mutate(data);
     console.log(data);
   }
 
@@ -238,10 +272,27 @@ export function Board() {
             gap: "64px",
           }}
         >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              onClick={() => setPage(eventsData.prev)}
+              disabled={page === 1}
+            >
+              Página anterio
+            </Button>
+            <Button
+              onClick={() => {
+                if (eventsData.next) {
+                  setPage(eventsData.next);
+                }
+              }}
+            >
+              Próxima página
+            </Button>
+          </Box>
           <Grid container spacing={3} sx={{ maxWidth: "1200px", mx: "auto" }}>
             {!isError &&
               !isLoading &&
-              data.map((event) => (
+              eventsData.data.map((event) => (
                 <Grid item xs={12} sm={6} md={4} key={event.id}>
                   <Card sx={{ width: "282px" }}>
                     <CardMedia
@@ -268,6 +319,44 @@ export function Board() {
                 </Grid>
               ))}
           </Grid>
+
+
+          
+          <Grid container spacing={3} sx={{ maxWidth: "1200px", mx: "auto" }}>
+            {!isInfiniteError &&
+              !isInfinitePending &&
+              eventsInfiniteData.pages.map((group, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  {group.data.map((event) => (
+                    <Card sx={{ width: "282px" }}>
+                      <CardMedia
+                        component="img"
+                        height="236px"
+                        image={event.image}
+                        alt={event.name}
+                      />
+                      <CardContent
+                        sx={{
+                          flexGrow: 1,
+                          py: 3,
+                          px: 2,
+                          backgroundColor: "#212121",
+                        }}
+                      >
+                        <Chip>
+                          <Typography variant="caption">
+                            {event.theme}
+                          </Typography>
+                        </Chip>
+                        <Typography>{event.date}</Typography>
+                        <Typography>{event.name}</Typography>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </Grid>
+              ))}
+          </Grid>
+          <Button onClick={fetchNextPage}>Carregar mais</Button>
         </Box>
       </Box>
     </Box>
