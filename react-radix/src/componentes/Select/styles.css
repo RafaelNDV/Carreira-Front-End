@@ -1,0 +1,71 @@
+.SelectTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 0 16px;
+  height: 33px;
+  width: 137px;
+  gap: 5px;
+  background-color: white;
+  border: 1px solid #e23155;
+}
+ 
+.SelectTrigger:focus {
+  box-shadow: 0 0 0 2px black;
+}
+ 
+.SelectTrigger[data-placeholder] {
+  color: #e23155;
+}
+
+.SelectIcon {
+  color: #e23155;
+}
+
+.SelectContent {
+  position: fixed;
+  overflow: hidden;
+  align-items: center;
+  min-width: 137px;
+  background-color: white;
+  border-radius: 0px 0px 8px 8px;
+  border: 1px solid #e23155;
+}
+ 
+.SelectContent[data-state="open"] {
+  transform: translateX(34.8%) translateY(21.8%);
+}
+
+.SelectViewport {
+  padding: 5px;
+}
+
+.SelectItem {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  padding: 0px 16px;
+  position: relative;
+  user-select: none;
+}
+ 
+.SelectItem[data-disabled] {
+  pointer-events: none;
+}
+ 
+.SelectItem[data-highlighted] {
+  outline: none;
+  background-color: white;
+  color: #e23155;
+}
+
+.SelectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: #e23155;
+  cursor: default;
+}
